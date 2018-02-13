@@ -68,7 +68,7 @@ def main():
     for source in args:
         dest = os.path.join(trash_folder, source)
         print("Moving {} to {}".format(source, dest)) 
-        os.rename(source, dest)
+        os.renames(source, dest)
 
 
 if __name__ == '__main__':
