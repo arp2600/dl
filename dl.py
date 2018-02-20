@@ -66,6 +66,11 @@ def main():
     # Move items to trash folder
     trash_folder = os.path.join(trash_path, next_trash_folder)
     for source in args:
+        # os.renames('some_dir/' ... raise an error
+        # os.renames('some_dir' ...
+        if source.endswith(os.sep):
+            source = source[:-1]
+
         dest = os.path.join(trash_folder, source)
         print("Moving {} to {}".format(source, dest)) 
         os.renames(source, dest)
