@@ -71,7 +71,14 @@ def main():
         if source.endswith(os.sep):
             source = source[:-1]
 
-        dest = os.path.join(trash_folder, source)
+        # Leading slash on absolute paths needs to be removed
+        # os.path.join('some_dir', '/absolute/path')
+        # will return '/absolute/path'
+        dest = source
+        if dest.startswith(os.sep):
+            dest = dest[1:]
+        dest = os.path.join(trash_folder, dest)
+
         print("Moving {} to {}".format(source, dest)) 
         os.renames(source, dest)
 
