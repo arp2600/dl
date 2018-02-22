@@ -2,13 +2,29 @@
 import re
 import sys
 import base64
+import pickle
+from trash import *
 from pathlib import Path
+
 
 # Load state
 #   Check .Trash folder exists
 #   Count numbered folders in .Trash
 # Create new folder in .Trash
 # Move arg items to new folder in .Trash
+class Info:
+    def __init__(self):
+        self.moves = []
+
+    def add_move(self, source, dest):
+        self.moves.append((source, dest))
+
+    def __str__(self):
+        out = ["rm.Info:"]
+        for source, dest in self.moves:
+            out.append('  {} => {}'.format(source, dest))
+
+        return '\n'.join(out)
 
 
 def build_subparser(parser):
@@ -32,36 +48,6 @@ def read_and_check_paths(paths):
     return paths
 
 
-def check_or_create_trash():
-    home = Path.home()
-    trash_path = home / '.dl' / 'trash'
-    if not trash_path.exists():
-        trash_path.mkdir(parents=True)
-
-    return trash_path
-
-
-def get_trash_folder():
-    trash_path = check_or_create_trash()
-
-    # User the contents of trash to work out
-    # the number for the next trash folder
-    pattern = re.compile('^\d+$')
-    condition = lambda x: x.is_dir and pattern.match(x.name)
-    trash_contents = [x for x in trash_path.iterdir() if condition(x)]
-
-    if trash_contents:
-        next_trash_folder = max([int(i.name) for i in trash_contents]) + 1
-        next_trash_folder = str(next_trash_folder)
-    else:
-        next_trash_folder = '0'
-
-    trash_folder = trash_path / next_trash_folder
-    trash_folder.mkdir()
-
-    return trash_folder
-
-
 def hash_path(path):
     path = str.encode(str(path))
     return base64.b64encode(path).decode('utf-8')
@@ -79,17 +65,24 @@ def move_to_trash(source, trash_folder):
     if not dest.parent.exists():
         dest.parent.mkdir(parents=True)
     source.rename(dest)
+    return dest
 
 
 def run(args):
     # Call filter paths first. In the event of none of the
-    # paths being valid, get_trash_folder wont create a new folder
+    # paths being valid, get_new_trash_folder wont create a new folder
     paths = read_and_check_paths(args.file)
-    trash_folder = get_trash_folder()
+    trash_folder = get_new_trash_folder()
+    info = Info()
 
     # Move items to trash folder
     for source in paths:
-        move_to_trash(source, trash_folder)
+        dest = move_to_trash(source, trash_folder)
+        info.add_move(source.resolve(), dest.resolve())
+
+    info_file = trash_folder / 'dl_info.pickle'
+    with open(info_file, 'wb') as f:
+        pickle.dump(info, f)
 
 
 if __name__ == '__main__':
