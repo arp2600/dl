@@ -42,13 +42,13 @@ def main():
         print("No valid arguments!")
         return
 
-    # Check .trash exists
+    # Check trash folder exists
     home = os.path.expanduser('~')
-    trash_path = os.path.join(home, '.trash')
+    trash_path = os.path.join(home, '.dl/trash')
     if not os.path.exists(trash_path):
-        os.mkdir(trash_path)
+        os.makedirs(trash_path)
 
-    # User the contents of .trash to work out
+    # User the contents of trash to work out
     # the number for the next trash folder
     trash_contents = os.listdir(trash_path)
     trash_contents = [
