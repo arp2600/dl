@@ -6,18 +6,19 @@ import undo
 
 def parse_args():
     parser = argparse.ArgumentParser(description='dl')
-    subparsers = parser.add_subparsers(dest='command')
-    rm.build_subparser(subparsers.add_parser('rm'))
-    undo.build_subparser(subparsers.add_parser('undo'))
-    return parser.parse_args()
+    parser.add_argument('file', nargs='*')
+    parser.add_argument('-u', '--undo', action='store_true')
+    return parser.parse_args(), parser
 
 
 def main():
-    args = parse_args()
-    if args.command == 'rm':
-        rm.run(args)
-    elif args.command == 'undo':
+    args, parser = parse_args()
+    if args.undo:
         undo.run(args)
+    elif args.file:
+        rm.run(args)
+    else:
+        parser.print_help()
 
 
 if __name__ == '__main__':

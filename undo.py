@@ -3,10 +3,6 @@ import pickle
 from trash import *
 
 
-def build_subparser(parser):
-    pass
-
-
 def run(args):
     trash_folders = get_trash_folders()
     if len(trash_folders) == 0:

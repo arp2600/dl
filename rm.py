@@ -27,10 +27,6 @@ class Info:
         return '\n'.join(out)
 
 
-def build_subparser(parser):
-    parser.add_argument('file', nargs='+')
-
-
 # Filter out non-existent paths from  args
 def read_and_check_paths(paths):
     def check_path(path):
