@@ -1,10 +1,10 @@
 import sys
 import pickle
-from trash import *
+import trash
 
 
 def run(args):
-    trash_folders = get_trash_folders()
+    trash_folders = trash.get_trash_folders()
     if len(trash_folders) == 0:
         print('Trash is empty')
         sys.exit(1)

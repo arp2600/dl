@@ -3,7 +3,7 @@ import re
 import sys
 import base64
 import pickle
-from trash import *
+import trash
 from pathlib import Path
 
 
@@ -68,7 +68,7 @@ def run(args):
     # Call filter paths first. In the event of none of the
     # paths being valid, get_new_trash_folder wont create a new folder
     paths = read_and_check_paths(args.file)
-    trash_folder = get_new_trash_folder()
+    trash_folder = trash.get_new_trash_folder()
     info = Info()
 
     # Move items to trash folder
