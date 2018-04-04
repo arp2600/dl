@@ -1,7 +1,7 @@
 import sys
 import pickle
 import trash
-from print_functions import print_error
+from print_functions import print_error, print_move
 
 
 def run(args):
@@ -16,7 +16,7 @@ def run(args):
         info = pickle.load(f)
 
     for source, dest in info.moves:
-        print('Restoring {}'.format(source))
+        print_move(source, dest, args.verbose)
         if not source.parent.exists():
             source.parent.mkdir(parents=True)
 

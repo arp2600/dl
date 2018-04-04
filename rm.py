@@ -5,7 +5,8 @@ import base64
 import pickle
 import trash
 from pathlib import Path
-from print_functions import print_error
+from print_functions import print_error, print_move
+
 
 # Load state
 #   Check .Trash folder exists
@@ -49,7 +50,7 @@ def hash_path(path):
     return base64.b64encode(path).decode('utf-8')
 
 
-def move_to_trash(source, trash_folder):
+def move_to_trash(source, trash_folder, verbosity):
     t = Path(trash_folder)
     if source.is_absolute():
         hsh = hash_path(source)[:8]
@@ -57,7 +58,7 @@ def move_to_trash(source, trash_folder):
     else:
         dest = t / source
 
-    print("Moving {} to {}".format(source, dest))
+    print_move(source, dest, verbosity)
     if not dest.parent.exists():
         dest.parent.mkdir(parents=True)
     source.rename(dest)
@@ -73,7 +74,7 @@ def run(args):
 
     # Move items to trash folder
     for source in paths:
-        dest = move_to_trash(source, trash_folder)
+        dest = move_to_trash(source, trash_folder, args.verbose)
         info.add_move(source.resolve(), dest.resolve())
 
     info_file = trash_folder / 'dl_info.pickle'

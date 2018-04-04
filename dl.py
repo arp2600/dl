@@ -8,6 +8,7 @@ def parse_args():
     parser = argparse.ArgumentParser(description='dl')
     parser.add_argument('file', nargs='*')
     parser.add_argument('-u', '--undo', action='store_true')
+    parser.add_argument('-v', '--verbose', action='count', default=0)
     return parser.parse_args(), parser
 
 
