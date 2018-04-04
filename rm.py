@@ -5,7 +5,7 @@ import base64
 import pickle
 import trash
 from pathlib import Path
-
+from print_functions import print_error
 
 # Load state
 #   Check .Trash folder exists
@@ -31,14 +31,14 @@ class Info:
 def read_and_check_paths(paths):
     def check_path(path):
         if not path.exists():
-            print("Could not find {}".format(path))
+            print_error("Could not find {}".format(path))
             return False
         return True
 
     paths = (Path(i) for i in paths)
     paths = [i for i in paths if check_path(i)]
     if not paths:
-        print("No valid file paths!")
+        print_error("No valid file paths!")
         sys.exit(1)
 
     return paths

@@ -1,12 +1,13 @@
 import sys
 import pickle
 import trash
+from print_functions import print_error
 
 
 def run(args):
     trash_folders = trash.get_trash_folders()
     if len(trash_folders) == 0:
-        print('Trash is empty')
+        print_error('Trash is empty')
         sys.exit(1)
 
     undo_folder = trash_folders[-1]
