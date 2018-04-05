@@ -23,4 +23,9 @@ def run(args):
         dest.rename(source)
 
     info_file.unlink()
+    # when items are deleted with an absolute path
+    # an extra directory gets made in the trash folder
+    for item in undo_folder.iterdir():
+        print("removing {}".format(item))
+        item.rmdir()
     undo_folder.rmdir()
