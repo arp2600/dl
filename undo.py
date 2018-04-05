@@ -16,7 +16,7 @@ def run(args):
         info = pickle.load(f)
 
     for source, dest in info.moves:
-        print_move(source, dest, args.verbose)
+        print_move(dest, source, args.verbose)
         if not source.parent.exists():
             source.parent.mkdir(parents=True)
 
