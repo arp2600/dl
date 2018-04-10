@@ -80,7 +80,3 @@ def run(args):
     info_file = trash_folder / 'dl_info.pickle'
     with open(info_file, 'wb') as f:
         pickle.dump(info, f)
-
-
-if __name__ == '__main__':
-    main()
