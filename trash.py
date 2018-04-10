@@ -1,10 +1,10 @@
 import re
 from pathlib import Path
 
+_home = Path.home()
 
 def get_trash_path():
-    home = Path.home()
-    trash_path = home / '.dl' / 'trash'
+    trash_path = _home / '.dl' / 'trash'
     if not trash_path.exists():
         trash_path.mkdir(parents=True)
 
