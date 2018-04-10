@@ -4,7 +4,7 @@ import trash
 from print_functions import print_error, print_move
 
 
-def run(args):
+def run(verbosity=0):
     trash_folders = trash.get_trash_folders()
     if len(trash_folders) == 0:
         print_error('Trash is empty')
@@ -16,7 +16,7 @@ def run(args):
         info = pickle.load(f)
 
     for source, dest in info.moves:
-        print_move(dest, source, args.verbose)
+        print_move(dest, source, verbosity)
         if not source.parent.exists():
             source.parent.mkdir(parents=True)
 

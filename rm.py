@@ -65,16 +65,16 @@ def move_to_trash(source, trash_folder, verbosity):
     return dest
 
 
-def run(args):
+def run(files, verbosity=0):
     # Call filter paths first. In the event of none of the
     # paths being valid, get_new_trash_folder wont create a new folder
-    paths = read_and_check_paths(args.file)
+    paths = read_and_check_paths(files)
     trash_folder = trash.get_new_trash_folder()
     info = Info()
 
     # Move items to trash folder
     for source in paths:
-        dest = move_to_trash(source, trash_folder, args.verbose)
+        dest = move_to_trash(source, trash_folder, verbosity)
         info.add_move(source.resolve(), dest.resolve())
 
     info_file = trash_folder / 'dl_info.pickle'

@@ -15,9 +15,9 @@ def parse_args():
 def main():
     args, parser = parse_args()
     if args.undo:
-        undo.run(args)
+        undo.run(args.verbose)
     elif args.file:
-        rm.run(args)
+        rm.run(args.file, args.verbose)
     else:
         parser.print_help()
 
