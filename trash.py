@@ -1,7 +1,9 @@
 import re
+import humanfriendly as hf
 from pathlib import Path
 
 _home = Path.home()
+
 
 def get_trash_path():
     trash_path = _home / '.dl' / 'trash'
@@ -42,3 +44,20 @@ def get_new_trash_folder(trash_path=None):
     trash_folder.mkdir()
 
     return trash_folder
+
+
+def print_size(verbosity=0):
+    path = get_trash_path()
+    paths = [path for path in path.glob('**/*') if path.is_file()]
+    if verbosity > 0:
+        paths.sort(key=lambda x: x.stat().st_size)
+        for path in paths:
+            file_size = path.stat().st_size
+            readable_size = hf.format_size(file_size)
+            print('{}  {}'.format(readable_size, path))
+        print('')
+
+    size_in_bytes = sum([p.stat().st_size for p in paths])
+
+    readable_size = hf.format_size(size_in_bytes)
+    print('Trash size is {}'.format(readable_size))
