@@ -6,32 +6,37 @@ import trash
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description='dl')
-    parser.add_argument('file', nargs='*')
-    parser.add_argument(
-        '-u',
-        '--undo',
-        action='store_true',
-        help='undo the last delete command')
-    parser.add_argument(
-        '-s',
-        '--size',
-        action='store_true',
-        help='print the size of the trash folder')
+    parser = argparse.ArgumentParser(
+        description='trash like program for command line')
     parser.add_argument('-v', '--verbose', action='count', default=0)
+
+    subparsers = parser.add_subparsers(title='commands', dest='command')
+
+    rm_parser = subparsers.add_parser(
+        'rm', description='Delete files', help='Delete files')
+    rm_parser.add_argument('file', nargs='+')
+
+    undo_parser = subparsers.add_parser(
+        'undo',
+        description='Undo the last rm command',
+        help='Undo the last rm command')
+    size_parser = subparsers.add_parser(
+        'size',
+        description='Print the size of the trash directory',
+        help='Print size of trash')
+
     return parser.parse_args(), parser
 
 
 def main():
     args, parser = parse_args()
-    if args.undo:
-        undo.run(args.verbose)
-    elif args.size:
-        trash.print_size(args.verbose)
-    elif args.file:
-        rm.run(args.file, args.verbose)
-    else:
-        parser.print_help()
+    switch = {
+        'undo': lambda args: undo.run(args.verbose),
+        'size': lambda args: trash.print_size(args.verbose),
+        'rm': lambda args: rm.run(args.file, args.verbose),
+        None: lambda _: parser.print_help(),
+    }
+    switch[args.command](args)
 
 
 if __name__ == '__main__':
