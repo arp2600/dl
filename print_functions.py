@@ -2,6 +2,11 @@ import sys
 from termcolor import colored, cprint
 
 
+def print_verbose(message, verbosity, minimum):
+    if verbosity >= minimum:
+        print(message)
+
+
 def print_error(message):
     if sys.stderr.isatty():
         cprint(message, 'red', file=sys.stderr)

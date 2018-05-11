@@ -3,6 +3,7 @@ import argparse
 import rm
 import undo
 import trash
+import empty
 
 
 def parse_args():
@@ -24,6 +25,10 @@ def parse_args():
         'size',
         description='Print the size of the trash directory',
         help='Print size of trash')
+    empty_parser = subparsers.add_parser(
+        'empty',
+        description='Empty the trash folder',
+        help='Empty the trash folder')
 
     return parser.parse_args(), parser
 
@@ -34,6 +39,7 @@ def main():
         'undo': lambda args: undo.run(args.verbose),
         'size': lambda args: trash.print_size(args.verbose),
         'rm': lambda args: rm.run(args.file, args.verbose),
+        'empty': lambda args: empty.run(args.verbose),
         None: lambda _: parser.print_help(),
     }
     switch[args.command](args)
