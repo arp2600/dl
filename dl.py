@@ -4,6 +4,7 @@ import rm
 import undo
 import trash
 import empty
+from print_functions import Logger
 
 
 def parse_args():
@@ -35,11 +36,13 @@ def parse_args():
 
 def main():
     args, parser = parse_args()
+    logger = Logger(args.verbose)
+
     switch = {
         'undo': lambda args: undo.run(args.verbose),
         'size': lambda args: trash.print_size(args.verbose),
         'rm': lambda args: rm.run(args.file, args.verbose),
-        'empty': lambda args: empty.run(args.verbose),
+        'empty': lambda args: empty.run(logger),
         None: lambda _: parser.print_help(),
     }
     switch[args.command](args)
