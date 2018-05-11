@@ -39,9 +39,9 @@ def main():
     logger = Logger(args.verbose)
 
     switch = {
-        'undo': lambda args: undo.run(args.verbose),
+        'undo': lambda args: undo.run(logger),
         'size': lambda args: trash.print_size(args.verbose),
-        'rm': lambda args: rm.run(args.file, args.verbose),
+        'rm': lambda args: rm.run(args.file, logger),
         'empty': lambda args: empty.run(logger),
         None: lambda _: parser.print_help(),
     }

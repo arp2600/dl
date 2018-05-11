@@ -5,7 +5,6 @@ import base64
 import pickle
 import trash
 from pathlib import Path
-from print_functions import print_error, print_move
 
 
 # Load state
@@ -29,17 +28,17 @@ class Info:
 
 
 # Filter out non-existent paths from  args
-def read_and_check_paths(paths):
+def read_and_check_paths(paths, logger):
     def check_path(path):
         if not path.exists():
-            print_error("Could not find {}".format(path))
+            logger.error("Could not find {}".format(path))
             return False
         return True
 
     paths = (Path(i) for i in paths)
     paths = [i for i in paths if check_path(i)]
     if not paths:
-        print_error("No valid file paths!")
+        logger.error("No valid file paths!")
         sys.exit(1)
 
     return paths
@@ -50,7 +49,7 @@ def hash_path(path):
     return base64.b64encode(path).decode('utf-8')
 
 
-def move_to_trash(source, trash_folder, verbosity):
+def move_to_trash(source, trash_folder, logger):
     t = Path(trash_folder)
     if source.is_absolute():
         hsh = hash_path(source)[:8]
@@ -58,23 +57,23 @@ def move_to_trash(source, trash_folder, verbosity):
     else:
         dest = t / source
 
-    print_move(source, dest, verbosity)
+    logger.print_move(source, dest)
     if not dest.parent.exists():
         dest.parent.mkdir(parents=True)
     source.rename(dest)
     return dest
 
 
-def run(files, verbosity=0):
+def run(files, logger):
     # Call filter paths first. In the event of none of the
     # paths being valid, get_new_trash_folder wont create a new folder
-    paths = read_and_check_paths(files)
+    paths = read_and_check_paths(files, logger)
     trash_folder = trash.get_new_trash_folder()
     info = Info()
 
     # Move items to trash folder
     for source in paths:
-        dest = move_to_trash(source, trash_folder, verbosity)
+        dest = move_to_trash(source, trash_folder, logger)
         info.add_move(source.resolve(), dest.resolve())
 
     info_file = trash_folder / 'dl_info.pickle'
