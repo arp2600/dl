@@ -18,15 +18,18 @@ def parse_args():
         'rm', description='Delete files', help='Delete files')
     rm_parser.add_argument('file', nargs='+')
 
-    undo_parser = subparsers.add_parser(
+    # undo parser
+    subparsers.add_parser(
         'undo',
         description='Undo the last rm command',
         help='Undo the last rm command')
-    size_parser = subparsers.add_parser(
+    # size parser
+    subparsers.add_parser(
         'size',
         description='Print the size of the trash directory',
         help='Print size of trash')
-    empty_parser = subparsers.add_parser(
+    # empty parser
+    subparsers.add_parser(
         'empty',
         description='Empty the trash folder',
         help='Empty the trash folder')
