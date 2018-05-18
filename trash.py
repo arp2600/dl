@@ -20,11 +20,9 @@ def get_trash_folders(trash_path=None):
     # User the contents of trash to work out
     # the number for the next trash folder
     pattern = re.compile('^\d+$')
-
-    def condition(x):
-        return x.is_dir and pattern.match(x.name)
-
-    trash_contents = [x for x in trash_path.iterdir() if condition(x)]
+    trash_contents = [
+        x for x in trash_path.iterdir() if x.is_dir and pattern.match(x.name)
+    ]
     trash_contents.sort(key=lambda x: int(x.name))
 
     return trash_contents
